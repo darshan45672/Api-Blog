@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 const CreateBlog = () => {
   const [html, setHtml] = useState();
@@ -13,6 +13,10 @@ const CreateBlog = () => {
     watch,
     formState: { errors },
   } = useForm();
+
+  const formSubmit = (data) => {
+    console.log(data);
+  };
   return (
     <div className="container mb-5">
       <div className="d-flex justify-content-between pt-5 mb-4">
@@ -26,20 +30,22 @@ const CreateBlog = () => {
           <div className="card-body">
             <div className="mb-3">
               <label className="form-label">Title</label>
-              <input type="text" className="form-control" placeholder="Name" />
+              <input { ...register('title',{ required:true })} type="text" className={"form-control ${errors.title && 'is-invalid'}"} placeholder="Name" />
+              {errors.title && <p className="invalid-feedback">Title field is required</p>}
             </div>
             <div className="mb-3">
               <label className="form-label">Short Description</label>
               {/* <input type="text" className="form-control" placeholder="Name" /> */}
-              <textarea cols={30} rows={4} className="form-control"></textarea>
+              <textarea { ...register('shortDescription')} cols={30} rows={4} className="form-control"></textarea>
             </div>
             <div className="mb-3">
               <label className="form-label">Description</label>
-              <Editor
+              <Editor { ...register('description',{ required:true })}
                 value={html}
                 containerProps={{ style: { height: "400px" } }}
                 onChange={onChange}
               />
+              {/* {errors.description && <span>This field is required</span>} */}
               {/* <textarea className="form-control" name="" id="" cols={30} rows={10}></textarea> */}
             </div>
             <div className="mb-3">
@@ -49,11 +55,12 @@ const CreateBlog = () => {
             </div>
             <div className="mb-3">
               <label className="form-label">Author</label>
-              <input
+              <input { ...register('author',{ required:true })}
                 type="text"
-                className="form-control"
+                className={"form-control ${errors.author && 'is-invalid'}"}
                 placeholder="Author"
               />
+              {errors.author && <p className="invalid-feedback">Author field is required</p>}
             </div>
             <button className="btn btn-dark"> Create</button>
           </div>
