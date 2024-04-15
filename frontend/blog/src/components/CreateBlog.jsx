@@ -4,19 +4,23 @@ import { useForm } from "react-hook-form";
 
 const CreateBlog = () => {
   const [html, setHtml] = useState();
+
   function onChange(e) {
     setHtml(e.target.value);
   }
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm();
+  } = useForm()
 
-  const formSubmit = (data) => {
-    console.log(data);
-  };
+  const onSubmit = (data) => console.log(data);
+
+  // console.log(watch("title"))
+  console.log(watch("author"))
+
   return (
     <div className="container mb-5">
       <div className="d-flex justify-content-between pt-5 mb-4">
@@ -26,12 +30,13 @@ const CreateBlog = () => {
         </a>
       </div>
       <div className="card border-0 shadow-lg">
-        <form onSubmit={handleSubmit(formSubmit)}>
+
+      <form onSubmit={handleSubmit(onSubmit)}>
           <div className="card-body">
             <div className="mb-3">
               <label className="form-label">Title</label>
-              <input { ...register('title',{ required:true })} type="text" className={"form-control ${errors.title && 'is-invalid'}"} placeholder="Name" />
-              {errors.title && <p className="invalid-feedback">Title field is required</p>}
+              <input {...register("title", { required: true })} type="text" className={"form-control"} placeholder="Name" />
+              {errors.title && <p>Title field is required</p> }
             </div>
             <div className="mb-3">
               <label className="form-label">Short Description</label>
@@ -57,12 +62,12 @@ const CreateBlog = () => {
               <label className="form-label">Author</label>
               <input { ...register('author',{ required:true })}
                 type="text"
-                className={"form-control ${errors.author && 'is-invalid'}"}
+                className={"form-control"}
                 placeholder="Author"
               />
-              {errors.author && <p className="invalid-feedback">Author field is required</p>}
+              {errors.author && <span>Author field is required</span>}
             </div>
-            <button className="btn btn-dark"> Create</button>
+            <button type="submit" className="btn btn-dark"> Create</button>
           </div>
         </form>
       </div>
