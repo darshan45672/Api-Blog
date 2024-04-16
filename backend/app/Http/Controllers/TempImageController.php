@@ -38,7 +38,7 @@ class TempImageController extends Controller
         return response()->json([
             'status' => true,
             'message' => 'Image added sucessfully!',
-            'errors' => $tempImage
+            'image' => $tempImage
         ]);
 
     }
