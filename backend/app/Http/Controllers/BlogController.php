@@ -12,7 +12,12 @@ class BlogController extends Controller
 {
     public function index()
     {
-        return view('blogs.index');
+        $blogs = Blog::orderBy('created_at', 'DESC')->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $blogs,
+        ]);
     }
 
     public function show()
@@ -51,10 +56,10 @@ class BlogController extends Controller
             $blog->image = $imageName;
             $blog->save();
 
-            $sourcePath = public_path('uploads/temp/'.$tempImage->name);
-            $destinationPath = public_path('uploads/blogs/'.$imageName);
-            dd($destinationPath);
-            File::copy( $sourcePath, $destinationPath);
+            $sourcePath = public_path('uploads/temp/' . $tempImage->name);
+            $destinationPath = public_path('uploads/blogs/' . $imageName);
+            // dd($destinationPath);
+            File::copy($sourcePath, $destinationPath);
         }
 
         return response()->json([
