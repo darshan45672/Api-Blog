@@ -1,9 +1,12 @@
 import React, { useState } from "react";
 import Editor from "react-simple-wysiwyg";
 import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
   const [html, setHtml] = useState();
+  const navigate = useNavigate();
 
   function onChange(e) {
     setHtml(e.target.value);
@@ -16,11 +19,26 @@ const CreateBlog = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async (data) =>{
+    const newData = { ...data, "description": html }
+    console.log(newData);
 
-  console.log(watch("title"));
-  console.log(watch("author"))
-  console.log(watch("shortDescription"))
+    const res = await fetch("http://127.0.0.1:8000/api/blogs", {
+      method: "POST",
+      headers: {
+        'Content-type' : 'application/json'
+      },
+      body: JSON.stringify(newData)
+    })
+
+    toast("Blog added sucessfully!");
+
+    navigate('/');
+  } 
+
+  // console.log(watch("title"));
+  // console.log(watch("author"))
+  // console.log(watch("shortDescription"))
 
   return (
     <div className="container mb-5">
@@ -37,13 +55,20 @@ const CreateBlog = () => {
             {/* register your input into the hook by invoking the "register" function */}
             <div className="mb-3">
               <label className="form-label">Title</label>
+              {/* <input
+                {...register("title", { required: true })}
+                type="text"
+                className={'form-control ${errors.title && 'is-invalid'}'}
+                placeholder="Name"
+              />
+              {errors.title && <p className='invalid-feedback'>Title is required</p>} */}
               <input
                 {...register("title", { required: true })}
                 type="text"
                 className={"form-control"}
                 placeholder="Name"
               />
-              {errors.title && <span>This field is required</span>}
+              {errors.title && <span className='mt-2'>Title is required</span>}
             </div>
             <div className="mb-3">
               <label className="form-label">Short Description</label>
@@ -53,6 +78,7 @@ const CreateBlog = () => {
                 cols={30}
                 rows={4}
                 className="form-control"
+                placeholder="Give a short description of the blog"
               ></textarea>
               {errors.shortDescription && <span>This field is required</span>}
             </div>
@@ -81,7 +107,6 @@ const CreateBlog = () => {
                {errors.author && <span>Author field is required</span>}
              </div>
              <button type="submit" className="btn btn-dark">
-            {" "}
             Create
           </button>
           </div>
