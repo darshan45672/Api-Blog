@@ -1,8 +1,10 @@
 import React from 'react'
+import { useForm } from "react-hook-form";
 
 const contact = () => {
+
   return (
-    <div>contact</div>
+    <div>jai</div>
   )
 }
 
