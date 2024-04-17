@@ -26,6 +26,9 @@ class BlogController extends Controller
         if ($blog == null) {
             return response()->json(['status' => false, 'message' => 'Blog not Found !!']);
         }
+
+        $blog['date'] = \Carbon\Carbon::parse($blog->created_at)->format('d M, Y');
+
         return response()->json([
             'status' => true,
             'data' => $blog,
