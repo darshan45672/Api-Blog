@@ -14,7 +14,7 @@ const BlogCard = ({blog}) => {
           { blog.shortDescription}
           </p>
           <div className="d-flex justify-content-between">
-            <a href="#" className="btn btn-dark">
+            <a href={`/blog/${blog.id}`} className="btn btn-dark">
               View Blog
             </a>
             <a href="#" className="text-dark ms-2">
