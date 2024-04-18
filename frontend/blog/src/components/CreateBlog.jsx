@@ -79,20 +79,13 @@ const CreateBlog = () => {
             {/* register your input into the hook by invoking the "register" function */}
             <div className="mb-3">
               <label className="form-label">Title</label>
-              {/* <input
-                {...register("title", { required: true })}
-                type="text"
-                className={'form-control ${errors.title && 'is-invalid'}'}
-                placeholder="Name"
-              />
-              {errors.title && <p className='invalid-feedback'>Title is required</p>} */}
               <input
                 {...register("title", { required: true })}
                 type="text"
-                className={"form-control"}
+                className={`form-control ${errors.title && 'is-invalid'}`}
                 placeholder="Name"
               />
-              {errors.title && <span className='mt-2'>Title is required</span>}
+              {errors.title && <p className='invalid-feedback'>Title is required</p>}
             </div>
             <div className="mb-3">
               <label className="form-label">Short Description</label>
@@ -101,10 +94,10 @@ const CreateBlog = () => {
                 {...register("shortDescription", { required: true })}
                 cols={30}
                 rows={4}
-                className="form-control"
+                className={`form-control ${errors.shortDescription && 'is-invalid'}`}
                 placeholder="Give a short description of the blog"
               ></textarea>
-              {errors.shortDescription && <span>This field is required</span>}
+              {errors.shortDescription && <p className='invalid-feedback'>Short Description is required is required</p>}
             </div>
             <div className="mb-3">
                <label className="form-label">Description</label>
@@ -125,10 +118,10 @@ const CreateBlog = () => {
                <label className="form-label">Author</label>
                <input { ...register('author',{ required:true })}
                  type="text"
-                 className={"form-control"}
+                 className={`form-control ${errors.author && 'is-invalid'}`}
                  placeholder="Author"
                />
-               {errors.author && <span>Author field is required</span>}
+               {errors.author && <p className='invalid-feedback'>Author name is required</p>}
              </div>
              <button type="submit" className="btn btn-dark">
             Create

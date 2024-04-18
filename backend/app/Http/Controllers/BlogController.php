@@ -12,12 +12,28 @@ class BlogController extends Controller
 {
     public function index()
     {
-        return view('blogs.index');
+        $blogs = Blog::orderBy('created_at', 'DESC')->get();
+
+        return response()->json([
+            'status' => true,
+            'data' => $blogs,
+        ]);
     }
 
-    public function show()
+    public function show( $id )
     {
-        return view('blogs.show');
+        $blog = Blog::find($id);
+        if ($blog == null) {
+            return response()->json(['status' => false, 'message' => 'Blog not Found !!']);
+        }
+
+        $blog['date'] = \Carbon\Carbon::parse($blog->created_at)->format('d M, Y');
+
+        return response()->json([
+            'status' => true,
+            'data' => $blog,
+        ]);
+     ;
     }
     public function store(Request $request)
     {
@@ -40,21 +56,37 @@ class BlogController extends Controller
 
         $tempImage = TempImage::find($request->image_id);
 
+        // if ($tempImage != null) {
+
+        //     // 1713255034.png
+        //     $imageExtensionArray = explode('.', $tempImage->name);
+        //     $extension = last($imageExtensionArray);
+
+        //     $imageName = time() . '-' . $blog->id . '.' . $extension;
+
+        //     $blog->image = $imageName;
+        //     $blog->save();
+
+        //     $sourcePath = public_path('uploads/temp/' . $tempImage->name);
+        //     $destinationPath = public_path('uploads/blogs/' . $imageName);
+        //     // dd($destinationPath);
+        //     File::copy($sourcePath, $destinationPath);
+
+        $tempImage = TempImage::find($request->image_id);
+
         if ($tempImage != null) {
 
-            // 1713255034.png
-            $imageExtensionArray = explode('.', $tempImage->name);
-            $extension = last($imageExtensionArray);
-
-            $imageName = time() . '-' . $blog->id . '.' . $extension;
+            $imageExtArray = explode('.',$tempImage->name);
+            $ext = last($imageExtArray);
+            $imageName = time().'-'.$blog->id.'.'.$ext;
 
             $blog->image = $imageName;
             $blog->save();
 
             $sourcePath = public_path('uploads/temp/'.$tempImage->name);
-            $destinationPath = public_path('uploads/blogs/'.$imageName);
-            dd($destinationPath);
-            File::copy( $sourcePath, $destinationPath);
+            $destPath = public_path('uploads/blogs/'.$imageName);
+
+            File::copy($sourcePath,$destPath);
         }
 
         return response()->json([
