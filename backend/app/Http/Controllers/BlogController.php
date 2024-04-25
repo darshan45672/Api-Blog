@@ -95,6 +95,7 @@ class BlogController extends Controller
             'data' => $blog
         ]);
     }
+
     public function update( $id, Request $request)
     {
 
