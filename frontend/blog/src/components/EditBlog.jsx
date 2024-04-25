@@ -1,0 +1,173 @@
+import React, { useEffect, useState } from "react";
+import Editor from "react-simple-wysiwyg";
+import { useForm } from "react-hook-form";
+import { toast } from "react-toastify";
+import { useNavigate, useParams } from "react-router-dom";
+
+const EditBlog = () => {
+  const [blog, setBlog] = useState([]);
+  const params = useParams();
+
+  const [html, setHtml] = useState("");
+  const [imageId, setImageId] = useState("");
+  const navigate = useNavigate();
+
+  function onChange(e) {
+    setHtml(e.target.value);
+  }
+
+  const handleFileChange = async (e) => {
+    // const file = e.target.files[0];
+    // const formData = new FormData();
+    // formData.append("image", file);
+
+    // const res = await fetch("http://127.0.0.1:8000/api/save-temp-image", {
+    //   method: "POST",
+    //   body: formData,
+    // });
+
+    const result = await res.json();
+
+    console.log(result);
+
+    if (result.status == false) {
+      alert(result.errors.image);
+      e.target.value = null;
+    }
+
+    setImageId(result.image.id);
+  };
+
+  const {
+    register,
+    handleSubmit,
+    watch,
+    reset,
+    formState: { errors },
+  } = useForm();
+
+  const fetchBlog = async () => {
+    const res = await fetch("http://127.0.0.1:8000/api/blogs/" + params.id);
+    const result = await res.json();
+    setBlog(result.data);
+    setHtml(result.data.description);
+    reset(result.data);
+    // console.log(result.data);
+    // console.log(blog.id);
+    // console.log(params.id);
+  };
+
+  useEffect(() => {
+    fetchBlog();
+  }, []);
+
+  const onSubmit = async (data) => {
+    const newData = { ...data, description: html, image_id: imageId };
+    console.log(newData);
+
+    const res = await fetch("http://127.0.0.1:8000/api/blogs/edit/" + params.id, {
+      method: "PUT",
+      headers: {
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify(newData),
+    });
+
+    toast("Blog updated sucessfully!");
+
+    navigate("/");
+  };
+
+  return (
+    <div className="container mb-5">
+      <div className="d-flex justify-content-between pt-5 mb-4">
+        <h4> Edit Blog</h4>
+        <a href="/" className="btn btn-dark">
+          Back
+        </a>
+      </div>
+      <div className="card border-0 shadow-lg">
+        <form className="mt-5" onSubmit={handleSubmit(onSubmit)}>
+          <div className="card-body">
+            {/* "handleSubmit" will validate your inputs before invoking "onSubmit" */}
+            {/* register your input into the hook by invoking the "register" function */}
+            <div className="mb-3">
+              <label className="form-label">Title</label>
+              <input
+                {...register("title", { required: true })}
+                type="text"
+                className={`form-control ${errors.title && "is-invalid"}`}
+                placeholder="Name"
+              />
+              {errors.title && (
+                <p className="invalid-feedback">Title is required</p>
+              )}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Short Description</label>
+              {/* <input type="text" className="form-control" placeholder="Name" /> */}
+              <textarea
+                {...register("shortDescription", { required: true })}
+                cols={30}
+                rows={4}
+                className={`form-control ${
+                  errors.shortDescription && "is-invalid"
+                }`}
+                placeholder="Give a short description of the blog"
+              ></textarea>
+              {errors.shortDescription && (
+                <p className="invalid-feedback">
+                  Short Description is required is required
+                </p>
+              )}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Description</label>
+              <Editor
+                value={html}
+                containerProps={{ style: { height: "400px" } }}
+                onChange={onChange}
+              />
+              {/* {errors.description && <span>This field is required</span>} */}
+              {/* <textarea className="form-control" name="" id="" cols={30} rows={10}></textarea> */}
+            </div>
+            <div className="mb-3">
+              <label className="mb-2">Image</label>
+              <br />
+              <input onChange={handleFileChange} type="file" />
+              {blog.image && (
+                <img
+                  className="w-100"
+                  src={`http://127.0.0.1:8000/api/blogs/${blog.image}`}
+                />
+              )}
+            </div>
+            <div className="mb-3">
+              <label className="form-label">Author</label>
+              <input
+                {...register("author", { required: true })}
+                type="text"
+                className={`form-control ${errors.author && "is-invalid"}`}
+                placeholder="Author"
+              />
+              {errors.author && (
+                <p className="invalid-feedback">Author name is required</p>
+              )}
+            </div>
+            <button type="submit" className="btn btn-dark">
+              Update Blog
+            </button>
+          </div>
+
+          {/* include validation with required or other standard HTML validation rules */}
+          {/* <input {...register("exampleRequired", { required: true })} /> */}
+          {/* errors will return when field validation fails  */}
+          {/* {errors.exampleRequired && <span>This field is required</span>} */}
+          {/* <input type="submit" /> */}
+        </form>
+      </div>
+    </div>
+  );
+};
+
+export default EditBlog;
