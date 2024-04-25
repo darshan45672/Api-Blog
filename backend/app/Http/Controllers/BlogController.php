@@ -116,8 +116,7 @@ class BlogController extends Controller
         if ($validator->fails()) {
             return response()->json(['status' => false, 'message' => 'check the errors', 'error' => $validator->errors()]);
         }
-
-        $blog = new Blog();
+        
         $blog->title = $request->title;
         $blog->shortDescription = $request->shortDescription;
         $blog->description = $request->description;
@@ -162,7 +161,7 @@ class BlogController extends Controller
 
         return response()->json([
             'status' => true,
-            'message' => 'Blog added successfully',
+            'message' => 'Blog updated successfully',
             'data' => $blog
         ]);
     }
