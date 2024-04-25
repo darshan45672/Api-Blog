@@ -17,7 +17,7 @@ const BlogCard = ({blog}) => {
             <a href={`/blog/${blog.id}`} className="btn btn-dark">
               View Blog
             </a>
-            <a href="#" className="text-dark ms-2">
+            <a href={`/blog/edit/${blog.id}`} className="text-dark ms-2">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="16"
