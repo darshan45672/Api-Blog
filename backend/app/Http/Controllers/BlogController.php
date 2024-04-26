@@ -165,7 +165,22 @@ class BlogController extends Controller
             'data' => $blog
         ]);
     }
-    public function destroy()
-    {
+    public function destroy( $id ){
+        $blog = Blog::find($id);
+        if ($blog == null) {
+            return response()->json([
+                'status' => false,
+                'message' => 'Blog not found',
+            ]);
+        }
+
+        File::delete(public_path('uploads/blogs/' . $blog->image));
+
+        $blog->delete();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Blog deleted successfully',
+        ]);
     }
 }
