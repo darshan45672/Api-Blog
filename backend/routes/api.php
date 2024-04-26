@@ -13,5 +13,5 @@ Route::post('blogs',[BlogController::class, 'store']);
 Route::put('blogs/edit/{id}',[BlogController::class, 'update']);
 Route::get('blogs',[BlogController::class, 'index']);
 Route::get('blogs/{id}',[BlogController::class, 'show']);
-Route::delete('blog/{id}',[BlogController::class, 'destroy']);
+Route::delete('blog/delete/{id}',[BlogController::class, 'destroy']);
 Route::post('save-temp-image',[TempImageController::class, 'store']);
