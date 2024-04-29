@@ -20,6 +20,11 @@ const Blogs = () => {
     setBlogs(result.data);
   };
 
+  const reset = async () => {
+    setSearch("");
+    fetchBlogs();
+  };
+
   useEffect(() => {
     fetchBlogs();
   }, []);
@@ -27,11 +32,20 @@ const Blogs = () => {
   return (
     <div className="container">
       <div className="d-flex justify-content-end pt-5 mb-4">
-        <form onSubmit = {(e) => searchBlogs(e)}>
-        <div className="d-flex">
-          <input type="text" value={search} onChange={(e) => setSearch( e.target.value)} className="form-control" placeholder="search" />
-          <button className="btn btn-dark ms-3">search</button>
-        </div>
+        <form onSubmit={(e) => searchBlogs(e)}>
+          <div className="d-flex">
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="form-control"
+              placeholder="search"
+            />
+            <button className="btn btn-dark ms-3">search</button>
+            <button onClick={() => reset()} className="btn btn-success ms-3">
+              reset
+            </button>
+          </div>
         </form>
       </div>
       <div className="d-flex justify-content-between pt-5 mb-4">
