@@ -10,8 +10,8 @@ const BlogCard = ({ blog }) => {
   const deleteBlog = (id) => {
     if (confirm("Are you sure you want to delete this blog?")) {
       console.log(id);
-      const res = fetch("http://127.0.0.1:8000/api/blogs/delete/" + id, {
-        method: "DELETE",
+      const res = fetch("http://127.0.0.1:8000/api/blogs/blog/" + id, {
+        method: "POST",
       });
 
     }
